@@ -1,2 +1,2 @@
 # DorkHelper
-already operator for serach engine dorking for bug hunting
+### just open main file in browser and enjoy 
