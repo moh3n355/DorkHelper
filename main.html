@@ -21,9 +21,9 @@
     --yellow:#ffbd2e;
     --green:#27c93f;
   }
-
+ 
   *{ box-sizing:border-box; margin:0; padding:0; }
-
+ 
   html,body{
     height:100%;
     background:
@@ -32,7 +32,7 @@
     color:var(--text);
     font-family:'JetBrains Mono', ui-monospace, monospace;
   }
-
+ 
   body{
     min-height:100vh;
     display:flex;
@@ -40,7 +40,7 @@
     justify-content:center;
     padding:32px 16px;
   }
-
+ 
   body::before{
     content:"";
     position:fixed; inset:0;
@@ -54,7 +54,7 @@
     );
     z-index:50;
   }
-
+ 
   .crt{
     width:100%;
     max-width:860px;
@@ -67,7 +67,7 @@
       0 0 120px -40px rgba(255,176,0,0.15);
     overflow:hidden;
   }
-
+ 
   .titlebar{
     display:flex;
     align-items:center;
@@ -76,12 +76,12 @@
     background:var(--panel-2);
     border-bottom:1px solid var(--hairline);
   }
-
+ 
   .dot{ width:11px; height:11px; border-radius:50%; }
   .dot.r{ background:var(--red); }
   .dot.y{ background:var(--yellow); }
   .dot.g{ background:var(--green); }
-
+ 
   .titlebar .name{
     margin-left:8px;
     font-size:12px;
@@ -89,7 +89,7 @@
     letter-spacing:0.03em;
   }
   .titlebar .name b{ color:var(--text); font-weight:600; }
-
+ 
   .titlebar .badge{
     margin-left:auto;
     font-size:10px;
@@ -100,9 +100,9 @@
     padding:3px 8px;
     border-radius:4px;
   }
-
+ 
   .screen{ padding:26px 26px 20px; }
-
+ 
   .banner{
     color:var(--amber-dim);
     font-size:11px;
@@ -112,7 +112,7 @@
     opacity:0.85;
     overflow-x:auto;
   }
-
+ 
   .prompt-row{
     display:flex;
     align-items:center;
@@ -121,7 +121,7 @@
     border-bottom:1px solid var(--hairline);
     margin-bottom:16px;
   }
-
+ 
   .prompt-label{
     color:var(--green);
     font-size:14px;
@@ -129,7 +129,7 @@
   }
   .prompt-label .path{ color:var(--teal); }
   .prompt-label .sym{ color:var(--text-dim); }
-
+ 
   .input-wrap{
     flex:1;
     display:flex;
@@ -144,7 +144,7 @@
     border-color:var(--amber-dim);
     box-shadow:0 0 0 3px rgba(255,176,0,0.08);
   }
-
+ 
   #domain{
     flex:1;
     background:transparent;
@@ -157,7 +157,7 @@
     letter-spacing:0.01em;
   }
   #domain::placeholder{ color:var(--text-dim); font-weight:400; }
-
+ 
   .cursor{
     display:inline-block;
     width:8px; height:16px;
@@ -166,7 +166,7 @@
     animation:blink 1s steps(1) infinite;
   }
   @keyframes blink{ 50%{ opacity:0; } }
-
+ 
   .meta-row{
     display:flex;
     justify-content:space-between;
@@ -177,13 +177,13 @@
     letter-spacing:0.04em;
   }
   .meta-row .count b{ color:var(--teal); font-weight:600; }
-
+ 
   .results{
     display:flex;
     flex-direction:column;
     border-top:1px solid var(--hairline);
   }
-
+ 
   .line{
     display:flex;
     gap:14px;
@@ -198,7 +198,7 @@
     background:rgba(255,176,0,0.05);
     padding-left:8px;
   }
-
+ 
   .ln{
     color:var(--text-dim);
     opacity:0.5;
@@ -207,11 +207,11 @@
     user-select:none;
     font-variant-numeric:tabular-nums;
   }
-
+ 
   .dork-text{ color:var(--text); word-break:break-all; }
   .dork-text .op{ color:var(--teal); font-weight:600; }
   .dork-text .pipe{ color:var(--text-dim); }
-
+ 
   .go{
     margin-left:auto;
     color:var(--text-dim);
@@ -222,7 +222,7 @@
     padding-left:10px;
   }
   .line:hover .go{ opacity:1; color:var(--amber-dim); }
-
+ 
   .footer{
     padding:14px 26px 20px;
     border-top:1px solid var(--hairline);
@@ -234,20 +234,20 @@
     gap:8px;
   }
   .footer .tag{ color:var(--amber-dim); }
-
+ 
   @media (max-width:560px){
     .prompt-row{ flex-direction:column; align-items:stretch; }
     .banner{ display:none; }
     .go{ display:none; }
   }
-
+ 
   @media (prefers-reduced-motion: reduce){
     .cursor{ animation:none; opacity:1; }
   }
 </style>
 </head>
 <body>
-
+ 
 <div class="crt">
   <div class="titlebar">
     <span class="dot r"></span>
@@ -256,10 +256,10 @@
     <span class="name"><b>dorker.sh</b> — recon console</span>
     <span class="badge">read-only</span>
   </div>
-
+ 
   <div class="screen">
     <div class="banner">google dork generator — site:, ext:, inurl: query builder for recon</div>
-
+ 
     <div class="prompt-row">
       <span class="prompt-label"><span class="path">dork</span><span class="sym">@</span><span class="path">target</span><span class="sym">:~$</span></span>
       <div class="input-wrap">
@@ -267,38 +267,33 @@
         <span class="cursor"></span>
       </div>
     </div>
-
+ 
     <div class="meta-row">
       <span class="count"><b id="dorkCount">0</b> queries generated</span>
       <span>click a line to run in google</span>
     </div>
-
+ 
     <div class="results" id="results"></div>
   </div>
-
+ 
   <div class="footer">
     <span>output opens in a new tab — nothing leaves this page</span>
-    <span class="tag">for authorized recon only</span>
+    <span><a href="https://taksec.github.io/google-dorks-bug-bounty/" target="_blank" rel="noopener" class="tag" style="text-decoration:underline;">taksec recomended →</a></span>
   </div>
 </div>
-
-<div class="footer">
-  <span>output opens in a new tab — nothing leaves this page</span>
-  <span><a href="https://taksec.github.io/google-dorks-bug-bounty/" target="_blank" rel="noopener" class="tag" style="text-decoration:underline;">taksec recomended →</a></span>
-</div>
-
+ 
 <script>
   function highlight(dork){
     return dork
       .replace(/\b(site|ext|inurl|intitle):/g, '<span class="op">$1:</span>')
       .replace(/\|/g, '<span class="pipe">|</span>');
   }
-
+ 
   function updateSearchQuery() {
     var domain = document.getElementById('domain').value.trim();
     var dorks = [
       'site:' + domain + ' inurl:&',
-      'site:' + domain + ' ext:php | ext:aspx | ext:asp | ext:jsp | ext:html | ext:htm',
+      'site:' + domain + ' ext:aspx | ext:asp | ext:jsp | ext:html | ext:htm',
       'site:' + domain + ' ext:log | ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:bak | ext:backup | ext:swp | ext:old | ext:~ | ext:git | ext:svn | ext:htpasswd | ext:htaccess | ext:xml',
       'site:' + domain + ' inurl:url= | inurl:return= | inurl:next= | inurl:redir= inurl:http',
       'site:' + domain + ' inurl:http | inurl:url= | inurl:path= | inurl:dest= | inurl:html= | inurl:data= | inurl:domain= | inurl:page= inurl:&',
@@ -309,41 +304,41 @@
       'site:' + domain + ' inurl:(unsubscribe|register|feedback|signup|join|contact|profile|user|comment|api|developer|affiliate|upload|mobile|upgrade|password)',
       'site:' + domain + ' intitle:"Welcome to Nginx"',
     ];
-
+ 
     var resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '';
     document.getElementById('dorkCount').textContent = dorks.length;
-
+ 
     dorks.forEach(function (dork, i) {
       var link = 'https://www.google.com/search?q=' + encodeURIComponent(dork);
-
+ 
       var a = document.createElement('a');
       a.href = link;
       a.target = '_blank';
       a.rel = 'noopener';
       a.className = 'line';
-
+ 
       var ln = document.createElement('span');
       ln.className = 'ln';
       ln.textContent = String(i + 1).padStart(2, '0');
-
+ 
       var text = document.createElement('span');
       text.className = 'dork-text';
       text.innerHTML = highlight(dork);
-
+ 
       var go = document.createElement('span');
       go.className = 'go';
       go.textContent = 'run →';
-
+ 
       a.appendChild(ln);
       a.appendChild(text);
       a.appendChild(go);
       resultsDiv.appendChild(a);
     });
   }
-
+ 
   updateSearchQuery();
 </script>
-
+ 
 </body>
 </html>
