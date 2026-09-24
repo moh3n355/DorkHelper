@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>dorker.sh</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -21,233 +21,57 @@
     --yellow:#ffbd2e;
     --green:#27c93f;
   }
- 
   *{ box-sizing:border-box; margin:0; padding:0; }
- 
-  html,body{
-    height:100%;
-    background:
-      radial-gradient(ellipse at 50% -10%, #2a1f12 0%, var(--void) 55%),
-      var(--void);
-    color:var(--text);
-    font-family:'JetBrains Mono', ui-monospace, monospace;
-  }
- 
-  body{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:32px 16px;
-  }
- 
-  body::before{
-    content:"";
-    position:fixed; inset:0;
-    pointer-events:none;
-    background:repeating-linear-gradient(
-      to bottom,
-      rgba(255,255,255,0.018) 0px,
-      rgba(255,255,255,0.018) 1px,
-      transparent 1px,
-      transparent 3px
-    );
-    z-index:50;
-  }
- 
-  .crt{
-    width:100%;
-    max-width:860px;
-    background:var(--panel);
-    border:1px solid var(--hairline);
-    border-radius:10px;
-    box-shadow:
-      0 0 0 1px rgba(0,0,0,0.4),
-      0 40px 80px -20px rgba(0,0,0,0.7),
-      0 0 120px -40px rgba(255,176,0,0.15);
-    overflow:hidden;
-  }
- 
-  .titlebar{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:11px 14px;
-    background:var(--panel-2);
-    border-bottom:1px solid var(--hairline);
-  }
- 
+  html,body{ height:100%; background:radial-gradient(ellipse at 50% -10%, #2a1f12 0%, var(--void) 55%), var(--void); color:var(--text); font-family:'JetBrains Mono', ui-monospace, monospace; }
+  body{ min-height:100%; display:flex; align-items:center; justify-content:center; padding:32px 16px; padding-top:calc(32px + env(safe-area-inset-top,0px)); padding-bottom:calc(32px + env(safe-area-inset-bottom,0px)); }
+  body::before{ content:""; position:fixed; inset:0; pointer-events:none; background:repeating-linear-gradient(to bottom, rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 3px); z-index:50; }
+  .crt{ width:100%; max-width:860px; background:var(--panel); border:1px solid var(--hairline); border-radius:10px; box-shadow:0 0 0 1px rgba(0,0,0,0.4), 0 40px 80px -20px rgba(0,0,0,0.7), 0 0 120px -40px rgba(255,176,0,0.15); overflow:hidden; }
+  .titlebar{ display:flex; align-items:center; gap:8px; padding:11px 14px; background:var(--panel-2); border-bottom:1px solid var(--hairline); }
   .dot{ width:11px; height:11px; border-radius:50%; }
-  .dot.r{ background:var(--red); }
-  .dot.y{ background:var(--yellow); }
-  .dot.g{ background:var(--green); }
- 
-  .titlebar .name{
-    margin-left:8px;
-    font-size:12px;
-    color:var(--text-dim);
-    letter-spacing:0.03em;
-  }
+  .dot.r{ background:var(--red); } .dot.y{ background:var(--yellow); } .dot.g{ background:var(--green); }
+  .titlebar .name{ margin-left:8px; font-size:12px; color:var(--text-dim); letter-spacing:0.03em; }
   .titlebar .name b{ color:var(--text); font-weight:600; }
- 
-  .titlebar .badge{
-    margin-left:auto;
-    font-size:10px;
-    letter-spacing:0.12em;
-    text-transform:uppercase;
-    color:var(--amber-dim);
-    border:1px solid var(--hairline);
-    padding:3px 8px;
-    border-radius:4px;
-  }
- 
+  .titlebar .badge{ margin-left:auto; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--amber-dim); border:1px solid var(--hairline); padding:3px 8px; border-radius:4px; }
   .screen{ padding:26px 26px 20px; }
- 
-  .banner{
-    color:var(--amber-dim);
-    font-size:11px;
-    line-height:1.5;
-    white-space:pre;
-    margin-bottom:18px;
-    opacity:0.85;
-    overflow-x:auto;
-  }
- 
-  .prompt-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding-bottom:16px;
-    border-bottom:1px solid var(--hairline);
-    margin-bottom:16px;
-  }
- 
-  .prompt-label{
-    color:var(--green);
-    font-size:14px;
-    white-space:nowrap;
-  }
+  .banner{ color:var(--amber-dim); font-size:11px; line-height:1.5; white-space:pre; margin-bottom:18px; opacity:0.85; overflow-x:auto; }
+
+  .engine-toggle{ display:flex; gap:0; margin-bottom:16px; border:1px solid var(--hairline); border-radius:6px; overflow:hidden; width:fit-content; }
+  .engine-btn{ appearance:none; border:none; background:var(--void); color:var(--text-dim); font-family:inherit; font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; padding:8px 18px; cursor:pointer; transition:background .12s ease, color .12s ease; }
+  .engine-btn + .engine-btn{ border-left:1px solid var(--hairline); }
+  .engine-btn.active{ background:var(--amber); color:#241a0a; }
+  .engine-btn:not(.active):hover{ background:var(--panel-2); color:var(--text); }
+
+  .prompt-row{ display:flex; align-items:center; gap:10px; padding-bottom:16px; border-bottom:1px solid var(--hairline); margin-bottom:16px; }
+  .prompt-label{ color:var(--green); font-size:14px; white-space:nowrap; }
   .prompt-label .path{ color:var(--teal); }
   .prompt-label .sym{ color:var(--text-dim); }
- 
-  .input-wrap{
-    flex:1;
-    display:flex;
-    align-items:center;
-    background:var(--void);
-    border:1px solid var(--hairline);
-    border-radius:6px;
-    padding:8px 12px;
-    transition:border-color .15s ease, box-shadow .15s ease;
-  }
-  .input-wrap:focus-within{
-    border-color:var(--amber-dim);
-    box-shadow:0 0 0 3px rgba(255,176,0,0.08);
-  }
- 
-  #domain{
-    flex:1;
-    background:transparent;
-    border:none;
-    outline:none;
-    color:var(--amber);
-    font-family:inherit;
-    font-size:15px;
-    font-weight:600;
-    letter-spacing:0.01em;
-  }
+  .input-wrap{ flex:1; display:flex; align-items:center; background:var(--void); border:1px solid var(--hairline); border-radius:6px; padding:8px 12px; transition:border-color .15s ease, box-shadow .15s ease; }
+  .input-wrap:focus-within{ border-color:var(--amber-dim); box-shadow:0 0 0 3px rgba(255,176,0,0.08); }
+  #domain{ flex:1; background:transparent; border:none; outline:none; color:var(--amber); font-family:inherit; font-size:15px; font-weight:600; letter-spacing:0.01em; min-width:0; }
   #domain::placeholder{ color:var(--text-dim); font-weight:400; }
- 
-  .cursor{
-    display:inline-block;
-    width:8px; height:16px;
-    background:var(--amber);
-    margin-left:2px;
-    animation:blink 1s steps(1) infinite;
-  }
+  .cursor{ display:inline-block; width:8px; height:16px; background:var(--amber); margin-left:2px; animation:blink 1s steps(1) infinite; }
   @keyframes blink{ 50%{ opacity:0; } }
- 
-  .meta-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:baseline;
-    margin-bottom:10px;
-    font-size:11px;
-    color:var(--text-dim);
-    letter-spacing:0.04em;
-  }
+  .meta-row{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; font-size:11px; color:var(--text-dim); letter-spacing:0.04em; flex-wrap:wrap; gap:6px; }
   .meta-row .count b{ color:var(--teal); font-weight:600; }
- 
-  .results{
-    display:flex;
-    flex-direction:column;
-    border-top:1px solid var(--hairline);
-  }
- 
-  .line{
-    display:flex;
-    gap:14px;
-    padding:9px 4px;
-    border-bottom:1px solid var(--hairline);
-    text-decoration:none;
-    font-size:13px;
-    line-height:1.55;
-    transition:background .12s ease, padding-left .12s ease;
-  }
-  .line:hover{
-    background:rgba(255,176,0,0.05);
-    padding-left:8px;
-  }
- 
-  .ln{
-    color:var(--text-dim);
-    opacity:0.5;
-    min-width:20px;
-    text-align:right;
-    user-select:none;
-    font-variant-numeric:tabular-nums;
-  }
- 
+  .results{ display:flex; flex-direction:column; border-top:1px solid var(--hairline); overflow-x:auto; }
+  .line{ display:flex; gap:14px; padding:9px 4px; border-bottom:1px solid var(--hairline); text-decoration:none; font-size:13px; line-height:1.55; transition:background .12s ease, padding-left .12s ease; }
+  .line:hover{ background:rgba(255,176,0,0.05); padding-left:8px; }
+  .ln{ color:var(--text-dim); opacity:0.5; min-width:20px; text-align:right; user-select:none; font-variant-numeric:tabular-nums; }
   .dork-text{ color:var(--text); word-break:break-all; }
   .dork-text .op{ color:var(--teal); font-weight:600; }
   .dork-text .pipe{ color:var(--text-dim); }
- 
-  .go{
-    margin-left:auto;
-    color:var(--text-dim);
-    font-size:11px;
-    opacity:0;
-    transition:opacity .12s ease;
-    white-space:nowrap;
-    padding-left:10px;
-  }
+  .go{ margin-left:auto; color:var(--text-dim); font-size:11px; opacity:0; transition:opacity .12s ease; white-space:nowrap; padding-left:10px; }
   .line:hover .go{ opacity:1; color:var(--amber-dim); }
- 
-  .footer{
-    padding:14px 26px 20px;
-    border-top:1px solid var(--hairline);
-    font-size:11px;
-    color:var(--text-dim);
-    display:flex;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    gap:8px;
-  }
+  .note{ font-size:11px; color:var(--text-dim); margin-top:10px; line-height:1.5; }
+  .note b{ color:var(--amber-dim); }
+  .footer{ padding:14px 26px 20px; border-top:1px solid var(--hairline); font-size:11px; color:var(--text-dim); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
   .footer .tag{ color:var(--amber-dim); }
- 
-  @media (max-width:560px){
-    .prompt-row{ flex-direction:column; align-items:stretch; }
-    .banner{ display:none; }
-    .go{ display:none; }
-  }
- 
-  @media (prefers-reduced-motion: reduce){
-    .cursor{ animation:none; opacity:1; }
-  }
+  @media (max-width:560px){ .prompt-row{ flex-direction:column; align-items:stretch; } .banner{ display:none; } .go{ display:none; } }
+  @media (prefers-reduced-motion: reduce){ .cursor{ animation:none; opacity:1; } }
 </style>
 </head>
 <body>
- 
+
 <div class="crt">
   <div class="titlebar">
     <span class="dot r"></span>
@@ -256,10 +80,15 @@
     <span class="name"><b>dorker.sh</b> — recon console</span>
     <span class="badge">read-only</span>
   </div>
- 
+
   <div class="screen">
-    <div class="banner">google dork generator — site:, ext:, inurl: query builder for recon</div>
- 
+    <div class="banner">google/bing dork generator — site:, ext:/filetype:, inurl: query builder for recon</div>
+
+    <div class="engine-toggle" role="tablist">
+      <button class="engine-btn active" id="btnGoogle" onclick="setEngine('google')">Google</button>
+      <button class="engine-btn" id="btnBing" onclick="setEngine('bing')">Bing</button>
+    </div>
+
     <div class="prompt-row">
       <span class="prompt-label"><span class="path">dork</span><span class="sym">@</span><span class="path">target</span><span class="sym">:~$</span></span>
       <div class="input-wrap">
@@ -267,34 +96,33 @@
         <span class="cursor"></span>
       </div>
     </div>
- 
+
     <div class="meta-row">
-      <span class="count"><b id="dorkCount">0</b> queries generated</span>
-      <span>click a line to run in google</span>
+      <span class="count"><b id="dorkCount">0</b> queries generated for <b id="engineLabel">Google</b></span>
+      <span>click a line to run in a new tab</span>
     </div>
- 
+
     <div class="results" id="results"></div>
+
+    <div class="note" id="engineNote"></div>
   </div>
- 
+
   <div class="footer">
     <span>output opens in a new tab — nothing leaves this page</span>
     <span><a href="https://taksec.github.io/google-dorks-bug-bounty/" target="_blank" rel="noopener" class="tag" style="text-decoration:underline;">taksec recomended →</a></span>
   </div>
 </div>
- 
+
 <script>
-  function highlight(dork){
-    return dork
-      .replace(/\b(site|ext|inurl|intitle):/g, '<span class="op">$1:</span>')
-      .replace(/\|/g, '<span class="pipe">|</span>');
-  }
- 
-  function updateSearchQuery() {
-    var domain = document.getElementById('domain').value.trim();
-    var dorks = [
+  var currentEngine = 'google';
+
+  // Base dorks are written in Google syntax. For Bing, ext: -> filetype:
+  // and the engine base URL / param changes.
+  function buildDorks(domain){
+    return [
       'site:' + domain + ' inurl:&',
       'site:' + domain + ' ext:aspx | ext:asp | ext:jsp | ext:html | ext:htm',
-      'site:' + domain + ' ext:log | ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:bak | ext:backup | ext:swp | ext:old | ext:~ | ext:git | ext:svn | ext:htpasswd | ext:htaccess | ext:xml',
+      'site:' + domain + ' ext:log | ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:bak | ext:backup | ext:swp | ext:old | ext:git | ext:svn | ext:htpasswd | ext:htaccess | ext:xml',
       'site:' + domain + ' inurl:url= | inurl:return= | inurl:next= | inurl:redir= inurl:http',
       'site:' + domain + ' inurl:http | inurl:url= | inurl:path= | inurl:dest= | inurl:html= | inurl:data= | inurl:domain= | inurl:page= inurl:&',
       'site:' + domain + ' inurl:config | inurl:env | inurl:setting | inurl:backup | inurl:admin | inurl:php',
@@ -302,43 +130,84 @@
       'site:' + domain + ' inurl:apidocs | inurl:api-docs | inurl:swagger | inurl:api-explorer',
       'site:' + domain + ' inurl:cmd | inurl:exec= | inurl:query= | inurl:code= | inurl:do= | inurl:run= | inurl:read= | inurl:ping= inurl:&',
       'site:' + domain + ' inurl:(unsubscribe|register|feedback|signup|join|contact|profile|user|comment|api|developer|affiliate|upload|mobile|upgrade|password)',
-      'site:' + domain + ' intitle:"Welcome to Nginx"',
+      'site:' + domain + ' intitle:"Welcome to Nginx"'
     ];
- 
+  }
+
+  function toBingSyntax(dork){
+    // Bing has no ext: operator — it uses filetype: instead.
+    // Bing also doesn't support the (a|b|c) grouping the same way; keep it,
+    // Bing will just treat it as plain text, so we leave that line as-is.
+    return dork.replace(/\bext:/g, 'filetype:');
+  }
+
+  function highlight(dork){
+    return dork
+      .replace(/\b(site|ext|filetype|inurl|intitle):/g, '<span class="op">$1:</span>')
+      .replace(/\|/g, '<span class="pipe">|</span>');
+  }
+
+  function engineBaseUrl(){
+    return currentEngine === 'bing'
+      ? 'https://www.bing.com/search?q='
+      : 'https://www.google.com/search?q=';
+  }
+
+  function setEngine(engine){
+    currentEngine = engine;
+    document.getElementById('btnGoogle').classList.toggle('active', engine === 'google');
+    document.getElementById('btnBing').classList.toggle('active', engine === 'bing');
+    document.getElementById('engineLabel').textContent = engine === 'bing' ? 'Bing' : 'Google';
+
+    var note = document.getElementById('engineNote');
+    note.innerHTML = engine === 'bing'
+      ? '<b>Note:</b> Bing has no <code>ext:</code> operator — queries are auto-translated to <code>filetype:</code>. Bing also ignores OR-grouping with parentheses, so the last query line is treated as plain text there.'
+      : '<b>Note:</b> <code>site:</code> must be a bare domain (e.g. peoplecert.org), never a full URL with https://.';
+
+    updateSearchQuery();
+  }
+
+  function updateSearchQuery() {
+    var domain = document.getElementById('domain').value.trim();
+    var dorksGoogle = buildDorks(domain);
+    var dorks = currentEngine === 'bing' ? dorksGoogle.map(toBingSyntax) : dorksGoogle;
+
     var resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '';
     document.getElementById('dorkCount').textContent = dorks.length;
- 
+
+    var base = engineBaseUrl();
+
     dorks.forEach(function (dork, i) {
-      var link = 'https://www.google.com/search?q=' + encodeURIComponent(dork);
- 
+      var link = base + encodeURIComponent(dork);
+
       var a = document.createElement('a');
       a.href = link;
       a.target = '_blank';
       a.rel = 'noopener';
       a.className = 'line';
- 
+
       var ln = document.createElement('span');
       ln.className = 'ln';
       ln.textContent = String(i + 1).padStart(2, '0');
- 
+
       var text = document.createElement('span');
       text.className = 'dork-text';
       text.innerHTML = highlight(dork);
- 
+
       var go = document.createElement('span');
       go.className = 'go';
       go.textContent = 'run →';
- 
+
       a.appendChild(ln);
       a.appendChild(text);
       a.appendChild(go);
       resultsDiv.appendChild(a);
     });
   }
- 
-  updateSearchQuery();
+
+  setEngine('google');
 </script>
- 
+
 </body>
 </html>
