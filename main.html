@@ -136,9 +136,22 @@
 
   function toBingSyntax(dork){
     // Bing has no ext: operator — it uses filetype: instead.
-    // Bing also doesn't support the (a|b|c) grouping the same way; keep it,
-    // Bing will just treat it as plain text, so we leave that line as-is.
-    return dork.replace(/\bext:/g, 'filetype:');
+    var converted = dork.replace(/\bext:/g, 'filetype:');
+
+    // Bing does NOT scope site: across an un-parenthesized "|" chain the way
+    // Google does — everything after the first "|" is treated as a separate,
+    // unscoped query, which leaks results from totally unrelated domains.
+    // Fix: pull site: out, wrap the rest in parentheses, and use OR instead of "|".
+    var siteMatch = converted.match(/^site:(\S+)\s+(.*)$/);
+    if (siteMatch && converted.indexOf('|') !== -1) {
+      var site = siteMatch[1];
+      var rest = siteMatch[2];
+      var orJoined = rest.split('|').map(function(s){ return s.trim(); }).join(' OR ');
+      converted = 'site:' + site + ' (' + orJoined + ')';
+    } else {
+      converted = converted.replace(/\|/g, ' OR ');
+    }
+    return converted;
   }
 
   function highlight(dork){
@@ -161,7 +174,7 @@
 
     var note = document.getElementById('engineNote');
     note.innerHTML = engine === 'bing'
-      ? '<b>Note:</b> Bing has no <code>ext:</code> operator — queries are auto-translated to <code>filetype:</code>. Bing also ignores OR-grouping with parentheses, so the last query line is treated as plain text there.'
+      ? '<b>Note:</b> Bing has no <code>ext:</code> operator — queries are auto-translated to <code>filetype:</code>. Bing also does not scope <code>site:</code> across an un-parenthesized <code>|</code> chain (it leaks unrelated domains), so queries are auto-wrapped as <code>site:domain (a OR b OR c)</code>.'
       : '<b>Note:</b> <code>site:</code> must be a bare domain (e.g. peoplecert.org), never a full URL with https://.';
 
     updateSearchQuery();
